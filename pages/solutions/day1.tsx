@@ -1,6 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Button, Form, Input } from "antd";
 import { useState } from "react";
 import SolutionForm from "../../components/SolutionForm";
 
@@ -15,9 +13,6 @@ const ProblemContainer = styled.div`
 `;
 
 export default function Home() {
-  const { register, handleSubmit } = useForm({
-    mode: "onSubmit",
-  });
   const [output1, setOutput1] = useState("");
   const [output2, setOutput2] = useState("");
 
