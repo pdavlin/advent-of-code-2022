@@ -1,13 +1,7 @@
 import SolutionContainer from "../../components/SolutionContainer";
 
-const default1 = `A X
+const default1 = `A Y
 B X
-C X
-A Y
-B Y
-C Y
-A Z
-B Z
 C Z
 `;
 const default2 = default1;
@@ -27,12 +21,13 @@ const mapMoveToPoints = new Map<string, number>([
   ["S", 3],
 ]);
 
-function succ(x) {
-  const RPS = "RPS";
-  return RPS[(RPS.indexOf(x) + 1) % 3];
-}
-
-function rolloverMove(x, y) {
+/**
+ * 
+ * @param x current move
+ * @param y direction to move
+ * @returns 
+ */
+function rolloverMove(x, y: number) {
   const RPS = "RPS";
   return RPS[(RPS.indexOf(x) + 3 + y) % 3];
 }
@@ -40,7 +35,7 @@ function rolloverMove(x, y) {
 function play(l, r) {
   if (l === r) {
     return 3;
-  } else if (succ(l) === r) {
+  } else if (rolloverMove(l, 1) === r) { // if l's *sucessor* is r -> r wins
     return 6;
   } else {
     return 0;
@@ -60,9 +55,7 @@ export default function Day2() {
       .split("\n")
       .map((line) => {
         let [l, r] = line.split(" ").map((x) => mapInputToMove.get(x));
-        const choicePoints = mapMoveToPoints.get(r);
-        const resultPoints = play(l, r);
-        return choicePoints + resultPoints;
+        return mapMoveToPoints.get(r) + play(l, r);
       })
       .reduce((a, b) => a + b);
 
@@ -74,9 +67,7 @@ export default function Day2() {
         let [l, r] = line.split(" ");
         l = mapInputToMove.get(l);
         r = rolloverMove(l, mapResultIndicatorToDirection.get(r));
-        const choicePoints = mapMoveToPoints.get(r);
-        const resultPoints = play(l, r);
-        return choicePoints + resultPoints;
+        return mapMoveToPoints.get(r) + play(l, r);
       })
       .reduce((a, b) => a + b);
 

@@ -18,8 +18,6 @@ const default1 = `1000
 
 const default2 = default1;
 
-console.log(default1);
-
 export default function Day1() {
   const p1 = (input) =>
     input
