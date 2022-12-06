@@ -1,10 +1,9 @@
-import styled from 'styled-components'
-
-const Title = styled.h1`
-  font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
-`
-
 export default function Home() {
-  return <Title>My page</Title>
+  return (
+    <>
+      <h1>Patrick's Advent of Code 2022</h1>
+      <h2>Welcome!</h2>
+      <span>Click a problem to the left to see my results.</span>
+    </>
+  );
 }

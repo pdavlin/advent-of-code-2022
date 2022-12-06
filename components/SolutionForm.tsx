@@ -2,20 +2,18 @@ import { Form, Button, Input } from "antd";
 import styled from "styled-components";
 
 const TextArea = styled(Input.TextArea)`
-  margin: 1rem 0 1rem 1rem;
+  margin: 0;
 `;
 
-const SolutionForm = ({ n = 1, onFormSubmit }) => {
+const SolutionForm = ({ n = 1, onFormSubmit, defaultInput }) => {
   return (
     <>
       <Form
         name="basic"
-        initialValues={{
-          remember: true,
-        }}
         onFinish={onFormSubmit}
         autoComplete="off"
         layout="vertical"
+        initialValues={{ input: defaultInput }}
       >
         <Form.Item
           label={`Input ${n}`}
@@ -32,7 +30,7 @@ const SolutionForm = ({ n = 1, onFormSubmit }) => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            Submit Part {n}
           </Button>
         </Form.Item>
       </Form>
