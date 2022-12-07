@@ -8,8 +8,11 @@ import { useRouter } from "next/router";
 import { daysCompleted } from "../utils/consts";
 import { GlobalStateProvider } from "../hooks/useGlobalState";
 import SetupButton from "../components/SetupButton";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
+
+const queryClient = new QueryClient();
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -84,26 +87,30 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <GlobalStateProvider {...pageProps}>
-        <GlobalStyle />
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sider>
-            <Menu
-              theme="dark"
-              defaultSelectedKeys={getDefaultSelected()}
-              mode="inline"
-              items={items}
-              onClick={onClick}
-            />
-            <SetupButton/>
-          </Sider>
-          <Layout className="site-layout">
-            <Content style={{ margin: "1rem" }}>
-              <Component {...pageProps} />
-            </Content>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStateProvider {...pageProps}>
+          <GlobalStyle />
+          <Layout style={{ minHeight: "100vh" }}>
+            <Sider>
+              <Menu
+                theme="dark"
+                defaultSelectedKeys={getDefaultSelected()}
+                mode="inline"
+                items={items}
+                onClick={onClick}
+              />
+              <SetupButton />
+            </Sider>
+            <Layout className="site-layout">
+              <Content style={{ margin: "1rem" }}>
+                <Hydrate>
+                  <Component {...pageProps} />
+                </Hydrate>
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
-      </GlobalStateProvider>
+        </GlobalStateProvider>
+      </QueryClientProvider>
     </>
   );
 }

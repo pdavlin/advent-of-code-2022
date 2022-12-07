@@ -1,5 +1,5 @@
 import { Input, Form, Button } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useGlobalState from "../hooks/useGlobalState";
 
@@ -7,21 +7,27 @@ const TextArea = styled(Input.TextArea)`
   margin: 0;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > *:first-child {
+    margin-right: 1rem;
+  }
+`;
+
 const Setup = () => {
   const [state, dispatch] = useGlobalState();
+  const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    console.log(state);
-  })
-
-  const onFormSubmit = ({cookie}) => {
-    console.log("hi");
+  const onFormSubmit = ({ cookie }) => {
     dispatch(() => {
       return {
         ...state,
-        cookie
+        cookie,
       };
-    })
+    });
+    setSaved(true);
   };
 
   return (
@@ -31,19 +37,19 @@ const Setup = () => {
         onFinish={onFormSubmit}
         autoComplete="off"
         layout="vertical"
-        initialValues={{ cookie: state.cookie}}
+        initialValues={{ cookie: state.cookie }}
       >
-        <Form.Item
-          label={`Advent of Code Cookie `}
-          name="cookie"
-        >
+        <Form.Item label={`Advent of Code Cookie `} name="cookie">
           <TextArea rows={5} />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
+          <ButtonContainer>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <span>{saved ? "Saved ✅" : ""}</span>
+          </ButtonContainer>
         </Form.Item>
       </Form>
     </>
