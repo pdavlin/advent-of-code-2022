@@ -1,13 +1,13 @@
 import type { AppProps } from "next/app";
 import styled, { createGlobalStyle } from "styled-components";
 import { HomeOutlined, QuestionCircleFilled } from "@ant-design/icons";
-import { Button, MenuProps } from "antd";
+import { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { daysCompleted } from "../utils/consts";
-import { pxToRem } from "../styles/styleUtils";
 import { GlobalStateProvider } from "../hooks/useGlobalState";
+import SetupButton from "../components/SetupButton";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -62,14 +62,6 @@ const PageTitle = styled.h1`
   margin: 1rem;
   width: pxToRem(200);
 `;
-
-const SetupButton = styled(Button)`
-  bottom: 1rem;
-  margin: 0 1rem;
-  position: absolute;
-  width: ${pxToRem(200 - 32)};
-`;
-
 export default function App({ Component, pageProps }: AppProps) {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
@@ -103,9 +95,7 @@ export default function App({ Component, pageProps }: AppProps) {
               items={items}
               onClick={onClick}
             />
-            <SetupButton onClick={() => router.push("/setup")}>
-              Setup
-            </SetupButton>
+            <SetupButton/>
           </Sider>
           <Layout className="site-layout">
             <Content style={{ margin: "1rem" }}>

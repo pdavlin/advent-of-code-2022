@@ -36,12 +36,6 @@ const Setup = () => {
         <Form.Item
           label={`Advent of Code Cookie `}
           name="cookie"
-          rules={[
-            {
-              required: true,
-              message: "Required",
-            },
-          ]}
         >
           <TextArea rows={5} />
         </Form.Item>
