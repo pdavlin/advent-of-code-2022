@@ -103,9 +103,7 @@ export default function App({ Component, pageProps }: AppProps) {
             </Sider>
             <Layout className="site-layout">
               <Content style={{ margin: "1rem" }}>
-                <Hydrate>
-                  <Component {...pageProps} />
-                </Hydrate>
+                <Component {...pageProps} />
               </Content>
             </Layout>
           </Layout>
