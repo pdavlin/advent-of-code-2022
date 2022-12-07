@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SolutionContainer from "../../components/SolutionContainer";
 
 const default1 = `1000

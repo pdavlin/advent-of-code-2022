@@ -1,12 +1,13 @@
 import type { AppProps } from "next/app";
-import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
-import {HomeOutlined, QuestionCircleFilled} from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu } from "antd";
+import styled, { createGlobalStyle } from "styled-components";
+import { HomeOutlined, QuestionCircleFilled } from "@ant-design/icons";
+import { Button, MenuProps } from "antd";
+import { Layout, Menu } from "antd";
 import { useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { daysCompleted } from "../utils/consts";
-import { ItemType } from "antd/es/menu/hooks/useItems";
+import { pxToRem } from "../styles/styleUtils";
+import { GlobalStateProvider } from "../hooks/useGlobalState";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -27,7 +28,7 @@ function getItem(
 }
 
 // const items: MenuItem[] = [getItem("Home", "0"), getItem("Day 1", "1")];
-const items: MenuItem[] = [getItem("Home", "0" , <HomeOutlined />)];
+const items: MenuItem[] = [getItem("Home", "0", <HomeOutlined />)];
 for (let i = 1; i <= daysCompleted; i++) {
   items.push(getItem(`Day ${i}`, `${i}`, <QuestionCircleFilled />));
 }
@@ -62,6 +63,13 @@ const PageTitle = styled.h1`
   width: pxToRem(200);
 `;
 
+const SetupButton = styled(Button)`
+  bottom: 1rem;
+  margin: 0 1rem;
+  position: absolute;
+  width: ${pxToRem(200 - 32)};
+`;
+
 export default function App({ Component, pageProps }: AppProps) {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
@@ -84,23 +92,28 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <GlobalStyle />
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sider>
-          <Menu
-            theme="dark"
-            defaultSelectedKeys={getDefaultSelected()}
-            mode="inline"
-            items={items}
-            onClick={onClick}
-          />
-        </Sider>
-        <Layout className="site-layout">
-          <Content style={{ margin: "1rem" }}>
-            <Component {...pageProps} />
-          </Content>
+      <GlobalStateProvider {...pageProps}>
+        <GlobalStyle />
+        <Layout style={{ minHeight: "100vh" }}>
+          <Sider>
+            <Menu
+              theme="dark"
+              defaultSelectedKeys={getDefaultSelected()}
+              mode="inline"
+              items={items}
+              onClick={onClick}
+            />
+            <SetupButton onClick={() => router.push("/setup")}>
+              Setup
+            </SetupButton>
+          </Sider>
+          <Layout className="site-layout">
+            <Content style={{ margin: "1rem" }}>
+              <Component {...pageProps} />
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+      </GlobalStateProvider>
     </>
   );
 }

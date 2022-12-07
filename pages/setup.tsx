@@ -1,24 +1,29 @@
-import { useActor, useSelector } from "@xstate/react";
 import { Input, Form, Button } from "antd";
-import { useContext } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import { MyContext } from "../hooks/contexts";
-import { myModel, selectIsCookieLoaded } from "../hooks/myMachine";
+import useGlobalState from "../hooks/useGlobalState";
 
 const TextArea = styled(Input.TextArea)`
   margin: 0;
 `;
 
 const Setup = () => {
-  const globalState = useContext(MyContext);
-  const {myService} = globalState;
-  const cookieLoaded = useSelector(myService, selectIsCookieLoaded);
+  const [state, dispatch] = useGlobalState();
 
-  const onFormSubmit =() => {
-    console.log('hi');
-    myService.send(myModel.events.onCookieLoaded())
-  }
-  
+  useEffect(() => {
+    console.log(state);
+  })
+
+  const onFormSubmit = ({cookie}) => {
+    console.log("hi");
+    dispatch(() => {
+      return {
+        ...state,
+        cookie
+      };
+    })
+  };
+
   return (
     <>
       <Form
@@ -26,6 +31,7 @@ const Setup = () => {
         onFinish={onFormSubmit}
         autoComplete="off"
         layout="vertical"
+        initialValues={{ cookie: state.cookie}}
       >
         <Form.Item
           label={`Advent of Code Cookie `}
