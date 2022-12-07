@@ -12,12 +12,16 @@ const FormContainer = styled.div`
   width: 100%;
 `;
 
+const ProblemLink = styled.div`
+  margin: 1rem 0;
+`;
+
 const formatOutput = (input) => {
   if (Array.isArray(input)) {
     return `[\n  ${input.join(",\n  ")}\n]`;
   }
   return input;
-}
+};
 
 const SolutionContainer = ({
   handleSubmission1,
@@ -28,9 +32,16 @@ const SolutionContainer = ({
   const [output1, setOutput1] = useState(null);
   const [output2, setOutput2] = useState(null);
   const router = useRouter();
+  const dayNum = +router.pathname.split("day")[1];
+
+  const openProblem = () => {
+    window.open(`https://adventofcode.com/2022/day/${dayNum}`, "_blank");
+  };
+
   return (
     <>
-      <h1>Day {router.pathname.split("day")[1]}</h1>
+      <h1>Day {dayNum}</h1>
+      <ProblemLink><a onClick={() => openProblem()}>AOC Link</a></ProblemLink>
       <Container>
         <FormContainer>
           <SolutionForm
