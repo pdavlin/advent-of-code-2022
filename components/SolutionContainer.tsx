@@ -12,6 +12,13 @@ const FormContainer = styled.div`
   width: 100%;
 `;
 
+const formatOutput = (input) => {
+  if (Array.isArray(input)) {
+    return `[\n  ${input.join(",\n  ")}\n]`;
+  }
+  return input;
+}
+
 const SolutionContainer = ({
   handleSubmission1,
   handleSubmission2,
@@ -33,7 +40,7 @@ const SolutionContainer = ({
           {output1 !== null && (
             <>
               <h2>Part 1 Solution</h2>
-              <pre>{output1}</pre>
+              <pre>{formatOutput(output1)}</pre>
             </>
           )}
         </FormContainer>
@@ -47,7 +54,7 @@ const SolutionContainer = ({
             {output2 !== null && (
               <>
                 <h2>Part 2 Solution</h2>
-                <pre>{output2}</pre>
+                <pre>{formatOutput(output2)}</pre>
               </>
             )}
           </FormContainer>
