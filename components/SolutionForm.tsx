@@ -6,6 +6,7 @@ import useGlobalState from "../hooks/useGlobalState";
 import { useQuery } from "react-query";
 
 const TextArea = styled(Input.TextArea)`
+  font-family: "Courier New", Courier, monospace;
   margin: 0;
 `;
 

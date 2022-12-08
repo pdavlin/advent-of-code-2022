@@ -4,7 +4,7 @@ import SolutionContainer from "../../components/SolutionContainer";
 const default1 = null;
 const default2 = default1;
 
-export default function DayTemplate() {
+export default function Day6() {
   const p1 = null;
 
   const p2 = null;
