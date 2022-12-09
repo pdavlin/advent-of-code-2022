@@ -11,11 +11,151 @@ L 5
 R 2
 `;
 const default2 = default1;
+// const default2 = `R 5
+// U 8
+// L 8
+// D 3
+// R 17
+// D 10
+// L 25
+// U 20
+// `;
+
+const violatesConstraints = (head, tail) => {
+  console.log(head, tail);
+  console.log(head[0] - tail[0], head[1] - tail[1]);
+  return Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1;
+};
+
+const signedRoundedAvg = (num) => {
+  return num > 0 ? Math.ceil(num / 2) : Math.floor(num / 2);
+};
+
+const calculateNext = (head, tail) => {
+  let nextC = [0, 0];
+  if (Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1) {
+    console.log(head, tail);
+    let xDif = head[0] - tail[0];
+    let yDif = head[1] - tail[1];
+    nextC = [
+      signedRoundedAvg(xDif),
+      signedRoundedAvg(yDif),
+    ];
+    console.log(nextC);
+  }
+  return nextC;
+};
+
+const directionToCoordChange = new Map<string, number[]>([
+  ["R", [1, 0]],
+  ["U", [0, 1]],
+  ["L", [-1, 0]],
+  ["D", [0, -1]],
+]);
 
 export default function Day9() {
-  const p1 = null;
+  const p1 = (input) => {
+    let head = [0, 0],
+      tail = [0, 0],
+      headLast = [0, 0],
+      tailLocs = new Map<number, number[]>([[0, [0]]]),
+      sumTailLocs = 0;
+    input
+      .trimEnd()
+      .split("\n")
+      .map((line) => {
+        let commands = [];
+        let [dir, dist] = line.split(" ");
+        dist = +dist;
+        while (dist > 0) {
+          commands.push(dir);
+          dist--;
+        }
+        return commands;
+      })
+      .flat()
+      .forEach((dir) => {
+        const coordChange = directionToCoordChange.get(dir);
+        headLast = head;
+        head = [head[0] + coordChange[0], head[1] + coordChange[1]];
+        if (violatesConstraints(head, tail)) {
+          tail = headLast;
+          if (tailLocs.get(tail[0]) === undefined) {
+            tailLocs.set(tail[0], [tail[1]]);
+          } else if (!tailLocs.get(tail[0]).includes(tail[1])) {
+            tailLocs.set(
+              tail[0],
+              [...tailLocs.get(tail[0]), tail[1]]
+                .filter((val, i, arr) => arr.indexOf(val) === i)
+                .sort((a, b) => a - b)
+            );
+          }
+        }
+      });
 
-  const p2 = null;
+    tailLocs.forEach((value, key, map) => {
+      sumTailLocs += value.length;
+    });
+
+    return sumTailLocs;
+  };
+
+  const p2 = (input) => {
+    let knots = new Array(10).fill([0, 0]);
+    let tailLocs = new Map<number, number[]>([[0, [0]]]);
+    let sumTailLocs = 0;
+    console.log("processing");
+    input
+      .trimEnd()
+      .split("\n")
+      .map((line) => {
+        let commands = [];
+        let [dir, dist] = line.split(" ");
+        dist = +dist;
+        while (dist > 0) {
+          commands.push(dir);
+          dist--;
+        }
+        return commands;
+      })
+      .flat()
+      .forEach((dir) => {
+        let knotsNext = [];
+        console.log("---");
+        console.log(dir);
+        const coordChange = directionToCoordChange.get(dir);
+        knotsNext.push([
+          knots[0][0] + coordChange[0],
+          knots[0][1] + coordChange[1],
+        ]);
+        knots.forEach((knot, index, knots) => {
+          if (index > 0) {
+            const next = calculateNext(knotsNext[index - 1], knot);
+            knotsNext.push([knot[0] + next[0], knot[1] + next[1]]);
+          }
+        });
+        console.log(knotsNext);
+        knots = JSON.parse(JSON.stringify(knotsNext));
+        const tail = knots[knots.length - 1];
+        if (tailLocs.get(tail[0]) === undefined) {
+          tailLocs.set(tail[0], [tail[1]]);
+        } else if (!tailLocs.get(tail[0]).includes(tail[1])) {
+          tailLocs.set(
+            tail[0],
+            [...tailLocs.get(tail[0]), tail[1]]
+              .filter((val, i, arr) => arr.indexOf(val) === i)
+              .sort((a, b) => a - b)
+          );
+        }
+      });
+
+    tailLocs.forEach((value, key, map) => {
+      console.log(key, value);
+      sumTailLocs += value.length;
+    });
+
+    return sumTailLocs;
+  };
 
   return (
     <SolutionContainer
