@@ -30,7 +30,7 @@ const signedRoundedAvg = (num) => {
 };
 
 const calculateNext = (head, tail) => {
-  if (Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1) {
+  if (violatesConstraints(head, tail)) {
     return [
       signedRoundedAvg(head[0] - tail[0]),
       signedRoundedAvg(head[1] - tail[1]),
