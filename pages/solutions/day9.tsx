@@ -10,16 +10,16 @@ D 1
 L 5
 R 2
 `;
-const default2 = default1;
-// const default2 = `R 5
-// U 8
-// L 8
-// D 3
-// R 17
-// D 10
-// L 25
-// U 20
-// `;
+
+const default2 = `R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20
+`;
 
 const violatesConstraints = (head, tail) => {
   return Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1;
@@ -95,13 +95,7 @@ export default function Day9() {
 
   const p2 = (input) => {
     let knots = new Array(10).fill([0, 0]);
-    let knotsLast = new Array(10).fill([0, 0]);
-    console.log(knots);
-    console.log(knots[0]);
-    console.log(knots[0][0]);
-    console.log(knotsLast);
-    console.log(knotsLast[0]);
-    console.log(knotsLast[0][0]);
+
     let tailLocs = new Map<number, number[]>([[0, [0]]]);
     let sumTailLocs = 0;
     input
@@ -131,7 +125,7 @@ export default function Day9() {
             knotsNext.push([knot[0] + next[0], knot[1] + next[1]]);
           }
         });
-        knots = JSON.parse(JSON.stringify(knotsNext));
+        knots = knotsNext;
         const tail = knots[knots.length - 1];
         if (tailLocs.get(tail[0]) === undefined) {
           tailLocs.set(tail[0], [tail[1]]);
