@@ -22,8 +22,6 @@ const default2 = default1;
 // `;
 
 const violatesConstraints = (head, tail) => {
-  console.log(head, tail);
-  console.log(head[0] - tail[0], head[1] - tail[1]);
   return Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1;
 };
 
@@ -32,18 +30,13 @@ const signedRoundedAvg = (num) => {
 };
 
 const calculateNext = (head, tail) => {
-  let nextC = [0, 0];
   if (Math.abs(head[0] - tail[0]) > 1 || Math.abs(head[1] - tail[1]) > 1) {
-    console.log(head, tail);
-    let xDif = head[0] - tail[0];
-    let yDif = head[1] - tail[1];
-    nextC = [
-      signedRoundedAvg(xDif),
-      signedRoundedAvg(yDif),
+    return [
+      signedRoundedAvg(head[0] - tail[0]),
+      signedRoundedAvg(head[1] - tail[1]),
     ];
-    console.log(nextC);
   }
-  return nextC;
+  return [0, 0];
 };
 
 const directionToCoordChange = new Map<string, number[]>([
@@ -102,9 +95,15 @@ export default function Day9() {
 
   const p2 = (input) => {
     let knots = new Array(10).fill([0, 0]);
+    let knotsLast = new Array(10).fill([0, 0]);
+    console.log(knots);
+    console.log(knots[0]);
+    console.log(knots[0][0]);
+    console.log(knotsLast);
+    console.log(knotsLast[0]);
+    console.log(knotsLast[0][0]);
     let tailLocs = new Map<number, number[]>([[0, [0]]]);
     let sumTailLocs = 0;
-    console.log("processing");
     input
       .trimEnd()
       .split("\n")
@@ -121,8 +120,6 @@ export default function Day9() {
       .flat()
       .forEach((dir) => {
         let knotsNext = [];
-        console.log("---");
-        console.log(dir);
         const coordChange = directionToCoordChange.get(dir);
         knotsNext.push([
           knots[0][0] + coordChange[0],
@@ -134,7 +131,6 @@ export default function Day9() {
             knotsNext.push([knot[0] + next[0], knot[1] + next[1]]);
           }
         });
-        console.log(knotsNext);
         knots = JSON.parse(JSON.stringify(knotsNext));
         const tail = knots[knots.length - 1];
         if (tailLocs.get(tail[0]) === undefined) {
@@ -150,7 +146,6 @@ export default function Day9() {
       });
 
     tailLocs.forEach((value, key, map) => {
-      console.log(key, value);
       sumTailLocs += value.length;
     });
 
